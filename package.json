@@ -1,0 +1,50 @@
+{
+  "name": "@bigcommerce/script-loader",
+  "version": "0.0.0",
+  "description": "A library for loading JavaScript files asynchronously",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/"
+  ],
+  "engines": {
+    "node": "^6.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bigcommerce/script-loader-js.git"
+  },
+  "author": "BigCommerce",
+  "bugs": {
+    "url": "https://github.com/bigcommerce/script-loader-js/issues"
+  },
+  "homepage": "https://github.com/bigcommerce/script-loader-js",
+  "scripts": {
+    "prebuild": "yarn lint && yarn test",
+    "build": "yarn compile",
+    "precompile": "rm -rf lib",
+    "compile": "tsc --outDir lib",
+    "lint": "tslint src/**/*.ts --config tslint.json && tsc --noEmit",
+    "prerelease": "git fetch --tags && yarn validate-dependencies && yarn validate-commits && yarn build",
+    "release": "git add lib && standard-version -a",
+    "test": "jest --config jest-config.js",
+    "test:coverage": "yarn test -- --coverage",
+    "test:series": "yarn test -- --runInBand",
+    "test:watch": "yarn test -- --watch",
+    "travis": "yarn lint && yarn test:series --  --coverage",
+    "validate-commits": "validate-commits",
+    "validate-dependencies": "yarn install --check-files --frozen-lockfile"
+  },
+  "dependencies": {
+    "tslib": "^1.8.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^21.1.10",
+    "jest": "^21.2.1",
+    "standard-version": "^4.2.0",
+    "ts-jest": "^21.2.3",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.1",
+    "validate-commits": "git+ssh://git@github.com/bigcommerce-labs/validate-commits.git#1.1.0"
+  }
+}
