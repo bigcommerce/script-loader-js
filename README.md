@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.com/bigcommerce/script-loader-js.svg?token=pywwZy8zX1F5AzeQ9WpL&branch=master)](https://travis-ci.com/bigcommerce/script-loader-js)
 
+A library for loading JavaScript files asynchronously. It loads script files by injecting script tags into DOM during runtime.
+
 ## Install
 
 You can install this library using [npm](https://www.npmjs.com/get-npm).
