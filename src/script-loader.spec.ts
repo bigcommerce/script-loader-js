@@ -12,7 +12,7 @@ describe('ScriptLoader', () => {
             element.onreadystatechange(new Event('readystatechange'))
         );
 
-        loader = new ScriptLoader(document);
+        loader = new ScriptLoader();
     });
 
     afterEach(() => {
@@ -42,5 +42,12 @@ describe('ScriptLoader', () => {
         } catch (output) {
             expect(output).toBeInstanceOf(Event);
         }
+    });
+
+    it('does not load same script twice', async () => {
+        await loader.loadScript('https://code.jquery.com/jquery-3.2.1.min.js');
+        await loader.loadScript('https://code.jquery.com/jquery-3.2.1.min.js');
+
+        expect(document.body.appendChild).toHaveBeenCalledTimes(1);
     });
 });
