@@ -1,20 +1,22 @@
 export default class ScriptLoader {
-    constructor(
-        private _document: Document
-    ) {}
+    private _scripts: { [key: string]: Promise<Event> } = {};
 
     loadScript(src: string): Promise<Event> {
-        return new Promise((resolve, reject) => {
-            const script = this._document.createElement('script') as LegacyHTMLScriptElement;
+        if (!this._scripts[src]) {
+            this._scripts[src] = new Promise((resolve, reject) => {
+                const script = document.createElement('script') as LegacyHTMLScriptElement;
 
-            script.onload = (event) => resolve(event);
-            script.onreadystatechange = (event) => resolve(event);
-            script.onerror = (event) => reject(event);
-            script.async = true;
-            script.src = src;
+                script.onload = (event) => resolve(event);
+                script.onreadystatechange = (event) => resolve(event);
+                script.onerror = (event) => reject(event);
+                script.async = true;
+                script.src = src;
 
-            this._document.body.appendChild(script);
-        });
+                document.body.appendChild(script);
+            });
+        }
+
+        return this._scripts[src];
     }
 }
 
