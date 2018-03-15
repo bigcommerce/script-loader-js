@@ -1,5 +1,4 @@
 export default class ScriptLoader {
-    private _document;
-    constructor(_document: Document);
+    private _scripts;
     loadScript(src: string): Promise<Event>;
 }

@@ -1,0 +1,1 @@
+{"version":3,"file":"get-script-loader.js","sourceRoot":"","sources":["../src/get-script-loader.ts"],"names":[],"mappings":";;AACA,+DAAwD;AAExD,IAAI,QAAsB,CAAC;AAE3B;IACI,EAAE,CAAC,CAAC,CAAC,QAAQ,CAAC,CAAC,CAAC;QACZ,QAAQ,GAAG,8BAAkB,EAAE,CAAC;IACpC,CAAC;IAED,MAAM,CAAC,QAAQ,CAAC;AACpB,CAAC;AAND,kCAMC"}

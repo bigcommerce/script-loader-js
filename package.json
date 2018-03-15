@@ -1,6 +1,6 @@
 {
   "name": "@bigcommerce/script-loader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A library for loading JavaScript files asynchronously",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
