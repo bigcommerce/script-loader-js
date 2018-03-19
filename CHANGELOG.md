@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/bigcommerce/script-loader-js/compare/v0.1.1...v0.1.2) (2018-03-19)
+
+
+### Bug Fixes
+
+* **core:** CHECKOUT-3012 Do not cache failed responses ([792de4a](https://github.com/bigcommerce/script-loader-js/commit/792de4a))
+
+
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/bigcommerce/script-loader-js/compare/v0.1.0...v0.1.1) (2018-03-15)
 
