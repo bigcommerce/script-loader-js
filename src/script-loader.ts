@@ -8,7 +8,10 @@ export default class ScriptLoader {
 
                 script.onload = (event) => resolve(event);
                 script.onreadystatechange = (event) => resolve(event);
-                script.onerror = (event) => reject(event);
+                script.onerror = (event) => {
+                    delete this._scripts[src];
+                    reject(event);
+                };
                 script.async = true;
                 script.src = src;
 
