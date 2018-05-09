@@ -41,4 +41,4 @@ yarn run
 
 ## License
 
-MIT (Pending)
+MIT
