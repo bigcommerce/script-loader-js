@@ -6,7 +6,10 @@ describe('getScriptLoader()', () => {
         const loader = getScriptLoader();
         const loader2 = getScriptLoader();
 
-        expect(loader).toBe(loader2);
-        expect(loader).toBeInstanceOf(ScriptLoader);
+        expect(loader)
+            .toBe(loader2);
+
+        expect(loader)
+            .toBeInstanceOf(ScriptLoader);
     });
 });

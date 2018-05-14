@@ -23,7 +23,7 @@
   "scripts": {
     "prebuild": "rm -rf lib",
     "build": "tsc --outDir lib --project tsconfig-build.json",
-    "lint": "tslint 'src/**/*.ts' --config tslint.json && tsc --noEmit",
+    "lint": "tslint 'src/**/*.ts' --config tslint.json --project tsconfig.json && tsc --noEmit",
     "prepare": "npm run build",
     "prerelease": "git fetch --tags && npm run validate-commits && npm run lint && npm test",
     "release": "standard-version",
@@ -38,6 +38,7 @@
     "tslib": "^1.8.0"
   },
   "devDependencies": {
+    "@bigcommerce/tslint-config": "^2.0.1",
     "@bigcommerce/validate-commits": "^2.0.2",
     "@types/jest": "^21.1.10",
     "jest": "^21.2.1",

@@ -1,5 +1,5 @@
-import ScriptLoader from './script-loader';
 import createScriptLoader from './create-script-loader';
+import ScriptLoader from './script-loader';
 
 let instance: ScriptLoader;
 
