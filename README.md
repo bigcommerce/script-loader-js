@@ -30,13 +30,13 @@ loader.loadScript('https://code.jquery.com/jquery-3.2.1.min.js')
 To release:
 
 ```sh
-yarn release
+npm run release
 ```
 
 To see other available commands:
 
 ```sh
-yarn run
+npm run
 ```
 
 ## License
