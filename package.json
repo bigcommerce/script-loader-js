@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@bigcommerce/tslint-config": "^2.0.1",
-    "@bigcommerce/validate-commits": "^2.0.2",
+    "@bigcommerce/validate-commits": "^2.0.3",
     "@types/jest": "^21.1.10",
     "jest": "^21.2.1",
     "standard-version": "^4.2.0",
