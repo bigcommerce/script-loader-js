@@ -4,6 +4,7 @@
         "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
         "importHelpers": true,
+        "inlineSources": true,
         "lib": [
             "dom",
             "dom.iterable",
