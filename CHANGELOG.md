@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/bigcommerce/script-loader-js/compare/v0.1.6...v0.2.0) (2019-09-20)
+
+
+### Features
+
+* **common:** CHECKOUT-4400 Add StylesheetLoader for loading stylesheets ([06fd92b](https://github.com/bigcommerce/script-loader-js/commit/06fd92b))
+* **common:** CHECKOUT-4400 Load multiple scripts in parallel and run them in series ([4d140a6](https://github.com/bigcommerce/script-loader-js/commit/4d140a6))
+
+
+
 <a name="0.1.6"></a>
 ## [0.1.6](https://github.com/bigcommerce/script-loader-js/compare/v0.1.5...v0.1.6) (2018-08-23)
 
