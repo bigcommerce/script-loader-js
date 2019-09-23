@@ -1,3 +1,7 @@
+export interface PreloadScriptOptions {
+    prefetch: boolean;
+}
+
 export default class ScriptLoader {
     private _scripts: { [key: string]: Promise<Event> } = {};
     private _preloadedScripts: { [key: string]: Promise<Event> } = {};
@@ -48,13 +52,14 @@ export default class ScriptLoader {
             .then(() => events);
     }
 
-    preloadScript(url: string): Promise<Event> {
+    preloadScript(url: string, options?: PreloadScriptOptions): Promise<Event> {
         if (!this._preloadedScripts[url]) {
             this._preloadedScripts[url] = new Promise((resolve, reject) => {
                 const preloadedScript = document.createElement('link');
+                const { prefetch = false } = options || {};
 
                 preloadedScript.as = 'script';
-                preloadedScript.rel = 'preload';
+                preloadedScript.rel = prefetch ? 'prefetch' : 'preload';
                 preloadedScript.href = url;
 
                 preloadedScript.onload = event => {
@@ -73,8 +78,8 @@ export default class ScriptLoader {
         return this._preloadedScripts[url];
     }
 
-    preloadScripts(urls: string[]): Promise<Event[]> {
-        return Promise.all(urls.map(url => this.preloadScript(url)));
+    preloadScripts(urls: string[], options?: PreloadScriptOptions): Promise<Event[]> {
+        return Promise.all(urls.map(url => this.preloadScript(url, options)));
     }
 }
 

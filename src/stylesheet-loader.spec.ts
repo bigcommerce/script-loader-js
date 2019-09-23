@@ -83,4 +83,61 @@ describe('StylesheetLoader', () => {
                 .toHaveBeenCalledTimes(2);
         });
     });
+
+    describe('when preloading stylesheet', () => {
+        let preloadedStylesheet: HTMLLinkElement;
+
+        beforeEach(() => {
+            preloadedStylesheet = document.createElement('link');
+
+            jest.spyOn(document, 'createElement')
+                .mockImplementation(() => preloadedStylesheet);
+
+            jest.spyOn(document.head, 'appendChild')
+                .mockImplementation(element =>
+                    setTimeout(() => element.onload(new Event('load')), 0)
+                );
+        });
+
+        it('attaches preload link tag to document', async () => {
+            await loader.preloadStylesheet('https://foo.bar/hello-world.css');
+
+            expect(document.head.appendChild)
+                .toHaveBeenCalledWith(preloadedStylesheet);
+
+            expect(preloadedStylesheet.rel)
+                .toEqual('preload');
+
+            expect(preloadedStylesheet.as)
+                .toEqual('style');
+
+            expect(preloadedStylesheet.href)
+                .toEqual('https://foo.bar/hello-world.css');
+        });
+
+        it('prefetches stylesheet if option is provided', async () => {
+            await loader.preloadStylesheet('https://foo.bar/hello-world.css', {
+                prefetch: true,
+            });
+
+            expect(document.head.appendChild)
+                .toHaveBeenCalledWith(preloadedStylesheet);
+
+            expect(preloadedStylesheet.rel)
+                .toEqual('prefetch');
+
+            expect(preloadedStylesheet.as)
+                .toEqual('style');
+
+            expect(preloadedStylesheet.href)
+                .toEqual('https://foo.bar/hello-world.css');
+        });
+
+        it('resolves promise if stylesheet is preloaded', async () => {
+            const output = await loader.preloadStylesheet('https://foo.bar/hello-world.css');
+
+            expect(output)
+                .toBeInstanceOf(Event);
+        });
+    });
 });
