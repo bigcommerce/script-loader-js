@@ -177,6 +177,24 @@ describe('ScriptLoader', () => {
                 .toEqual('https://cdn.foobar.com/foo.min.js');
         });
 
+        it('prefetches script if option is provided', async () => {
+            await loader.preloadScript('https://cdn.foobar.com/foo.min.js', {
+                prefetch: true,
+            });
+
+            expect(document.head.appendChild)
+                .toHaveBeenCalledWith(preloadedScript);
+
+            expect(preloadedScript.rel)
+                .toEqual('prefetch');
+
+            expect(preloadedScript.as)
+                .toEqual('script');
+
+            expect(preloadedScript.href)
+                .toEqual('https://cdn.foobar.com/foo.min.js');
+        });
+
         it('resolves promise if script is preloaded', async () => {
             const output = await loader.preloadScript('https://cdn.foobar.com/foo.min.js');
 
