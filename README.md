@@ -14,15 +14,106 @@ npm install --save @bigcommerce/script-loader
 
 ## Usage
 
+### For scripts
+
+To load a single script:
+
 ```js
 import { createScriptLoader } from '@bigcommerce/script-loader';
 
 const loader = createScriptLoader();
 
-loader.loadScript('https://code.jquery.com/jquery-3.2.1.min.js')
+loader.loadScript('https://cdn.foo.bar/main.js')
     .then(() => {
         console.log('Loaded!');
     });
+```
+
+To load multiple scripts:
+
+```js
+loader.loadScripts([
+    'https://cdn.foo.bar/vendor.js',
+    'https://cdn.foo.bar/main.js',
+]);
+```
+
+This is different to calling `loadScript` multiple times because it can ensure that the scripts are downloaded in parallel but executed in the same sequence as the provided list of URLs.
+
+To preload or prefetch a script:
+
+```js
+loader.preloadScript('https://cdn.foo.bar/chunk.js');
+loader.preloadScript('https://cdn.foo.bar/another-chunk.js', { prefetch: true });
+```
+
+A prefetched script is a low priority resource, therefore it will be downloaded in the background when the browser is idle. On the other hand, a script without `prefetch` option will be marked as a high priority resource and downloaded immediately. 
+
+Please note that the preloaded or prefetched script won't be executed. It will just be downloaded to the browser cache. To attach it to the document and execute it, you will need to call `loadScript` with the same URL.
+
+To preload or prefetch multiple scripts:
+
+```js
+loader.preloadScripts([
+    'https://cdn.foo.bar/chunk.js',
+    'https://cdn.foo.bar/another-chunk.js',
+]);
+
+loader.preloadScripts([
+    'https://cdn.foo.bar/chunk.js',
+    'https://cdn.foo.bar/another-chunk.js',
+], { prefetch: true });
+```
+
+### For stylesheets
+
+To load a single stylesheet:
+
+```js
+import { createStylesheetLoader } from '@bigcommerce/script-loader';
+
+const loader = createStylesheetLoader();
+
+loader.loadStylesheet('https://cdn.foo.bar/main.css')
+    .then(() => {
+        console.log('Loaded!');
+    });
+```
+
+To load multiple stylesheets:
+
+```js
+loader.loadStylesheet([
+    'https://cdn.foo.bar/vendor.css',
+    'https://cdn.foo.bar/main.css',
+]);
+```
+
+To prepend, instead of append, a stylesheet to the head of a document:
+
+```js
+loader.loadStylesheet('https://cdn.foo.bar/main.css', { prepend: true });
+```
+
+To preload or prefetch a stylesheet:
+
+```js
+loader.preloadStylesheet('https://cdn.foo.bar/chunk.css');
+loader.preloadStylesheet('https://cdn.foo.bar/another-chunk.css', { prefetch: true });
+```
+
+Similar to a preloaded script, a preloaded or prefetched stylesheet won't take an effect until it is attached to the document. To do it, you will need to call `loadStylesheet` with the same URL.
+
+```js
+loader.preloadStylesheets([
+    'https://cdn.foo.bar/chunk.css',
+    'https://cdn.foo.bar/another-chunk.css',
+]);
+
+loader.preloadStylesheets([
+    'https://cdn.foo.bar/chunk.css',
+    'https://cdn.foo.bar/another-chunk.css',
+], { prefetch: true });
 ```
 
 ## Contribution
