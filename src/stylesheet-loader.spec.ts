@@ -1,16 +1,32 @@
+import { createRequestSender, RequestSender } from '@bigcommerce/request-sender';
+
+import BrowserSupport from './browser-support';
 import StylesheetLoader from './stylesheet-loader';
 
 describe('StylesheetLoader', () => {
+    let browserSupport: BrowserSupport;
     let loader: StylesheetLoader;
+    let requestSender: RequestSender;
     let stylesheet: HTMLLinkElement;
 
     beforeEach(() => {
+        browserSupport = new BrowserSupport();
+        requestSender = createRequestSender();
         stylesheet = document.createElement('link');
+
+        jest.spyOn(browserSupport, 'canSupportRel')
+            .mockReturnValue(true);
+
+        jest.spyOn(requestSender, 'get')
+            .mockReturnValue(Promise.resolve({}));
 
         jest.spyOn(document, 'createElement')
             .mockImplementation(() => stylesheet);
 
-        loader = new StylesheetLoader();
+        loader = new StylesheetLoader(
+            browserSupport,
+            requestSender
+        );
     });
 
     afterEach(() => {
@@ -131,6 +147,19 @@ describe('StylesheetLoader', () => {
 
             expect(preloadedStylesheet.href)
                 .toEqual('https://foo.bar/hello-world.css');
+        });
+
+        it('falls back to using XHR if browser does not support preload', async () => {
+            jest.spyOn(browserSupport, 'canSupportRel')
+                .mockImplementation(rel => rel === 'preload' ? false : true);
+
+            await loader.preloadStylesheet('https://foo.bar/hello-world.css');
+
+            expect(requestSender.get)
+                .toHaveBeenCalledWith('https://foo.bar/hello-world.css', {
+                    credentials: false,
+                    headers: { Accept: 'text/css' },
+                });
         });
 
         it('resolves promise if stylesheet is preloaded', async () => {
