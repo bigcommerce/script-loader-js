@@ -1,4 +1,4 @@
-import { RequestSender, Response } from '@bigcommerce/request-sender';
+import { RequestSender } from '@bigcommerce/request-sender';
 
 import BrowserSupport from './browser-support';
 
@@ -11,8 +11,8 @@ export interface PreloadScriptOptions {
 }
 
 export default class ScriptLoader {
-    private _scripts: { [key: string]: Promise<Event> } = {};
-    private _preloadedScripts: { [key: string]: Promise<Event | Response> } = {};
+    private _scripts: { [key: string]: Promise<void> } = {};
+    private _preloadedScripts: { [key: string]: Promise<void> } = {};
 
     /**
      * @internal
@@ -22,14 +22,14 @@ export default class ScriptLoader {
         private _requestSender: RequestSender
     ) {}
 
-    loadScript(src: string, options?: LoadScriptOptions): Promise<Event> {
+    loadScript(src: string, options?: LoadScriptOptions): Promise<void> {
         if (!this._scripts[src]) {
             this._scripts[src] = new Promise((resolve, reject) => {
                 const script = document.createElement('script') as LegacyHTMLScriptElement;
                 const { async = false } = options || {};
 
-                script.onload = event => resolve(event);
-                script.onreadystatechange = event => resolve(event);
+                script.onload = () => resolve();
+                script.onreadystatechange = () => resolve();
                 script.onerror = event => {
                     delete this._scripts[src];
                     reject(event);
@@ -44,11 +44,12 @@ export default class ScriptLoader {
         return this._scripts[src];
     }
 
-    loadScripts(urls: string[], options?: LoadScriptOptions): Promise<Event[]> {
-        return Promise.all(urls.map(url => this.loadScript(url, options)));
+    loadScripts(urls: string[], options?: LoadScriptOptions): Promise<void> {
+        return Promise.all(urls.map(url => this.loadScript(url, options)))
+            .then(() => undefined);
     }
 
-    preloadScript(url: string, options?: PreloadScriptOptions): Promise<Event | Response> {
+    preloadScript(url: string, options?: PreloadScriptOptions): Promise<void> {
         if (!this._preloadedScripts[url]) {
             this._preloadedScripts[url] = new Promise((resolve, reject) => {
                 const { prefetch = false } = options || {};
@@ -61,13 +62,13 @@ export default class ScriptLoader {
                     preloadedScript.rel = rel;
                     preloadedScript.href = url;
 
-                    preloadedScript.onload = event => {
-                        resolve(event);
+                    preloadedScript.onload = () => {
+                        resolve();
                     };
 
-                    preloadedScript.onerror = event => {
+                    preloadedScript.onerror = () => {
                         delete this._preloadedScripts[url];
-                        reject(event);
+                        reject();
                     };
 
                     document.head.appendChild(preloadedScript);
@@ -76,7 +77,7 @@ export default class ScriptLoader {
                         credentials: false,
                         headers: { Accept: 'application/javascript' },
                     })
-                        .then(resolve)
+                        .then(() => resolve())
                         .catch(reject);
                 }
             });
@@ -85,8 +86,9 @@ export default class ScriptLoader {
         return this._preloadedScripts[url];
     }
 
-    preloadScripts(urls: string[], options?: PreloadScriptOptions): Promise<Array<Event | Response>> {
-        return Promise.all(urls.map(url => this.preloadScript(url, options)));
+    preloadScripts(urls: string[], options?: PreloadScriptOptions): Promise<void> {
+        return Promise.all(urls.map(url => this.preloadScript(url, options)))
+            .then(() => undefined);
     }
 }
 

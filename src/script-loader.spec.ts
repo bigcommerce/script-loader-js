@@ -64,7 +64,7 @@ describe('ScriptLoader', () => {
             const output = await loader.loadScript('https://code.jquery.com/jquery-3.2.1.min.js');
 
             expect(output)
-                .toBeInstanceOf(Event);
+                .toBeUndefined();
         });
 
         it('does not load same script twice', async () => {
@@ -229,7 +229,7 @@ describe('ScriptLoader', () => {
             const output = await loader.preloadScript('https://cdn.foobar.com/foo.min.js');
 
             expect(output)
-                .toBeInstanceOf(Event);
+                .toBeUndefined();
         });
     });
 });

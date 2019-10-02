@@ -55,7 +55,7 @@ describe('StylesheetLoader', () => {
             const output = await loader.loadStylesheet('https://foo.bar/hello-world.css');
 
             expect(output)
-                .toBeInstanceOf(Event);
+                .toBeUndefined();
         });
 
         it('does not load same stylesheet twice', async () => {
@@ -166,7 +166,7 @@ describe('StylesheetLoader', () => {
             const output = await loader.preloadStylesheet('https://foo.bar/hello-world.css');
 
             expect(output)
-                .toBeInstanceOf(Event);
+                .toBeUndefined();
         });
     });
 });

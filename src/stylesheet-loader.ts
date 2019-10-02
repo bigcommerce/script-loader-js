@@ -1,4 +1,4 @@
-import { RequestSender, Response } from '@bigcommerce/request-sender';
+import { RequestSender } from '@bigcommerce/request-sender';
 
 import BrowserSupport from './browser-support';
 
@@ -11,8 +11,8 @@ export interface PreloadStylesheetOptions {
 }
 
 export default class StylesheetLoader {
-    private _stylesheets: { [key: string]: Promise<Event> } = {};
-    private _preloadedStylesheets: { [key: string]: Promise<Event | Response> } = {};
+    private _stylesheets: { [key: string]: Promise<void> } = {};
+    private _preloadedStylesheets: { [key: string]: Promise<void> } = {};
 
     /**
      * @internal
@@ -22,13 +22,13 @@ export default class StylesheetLoader {
         private _requestSender: RequestSender
     ) {}
 
-    loadStylesheet(src: string, options?: LoadStylesheetOptions): Promise<Event> {
+    loadStylesheet(src: string, options?: LoadStylesheetOptions): Promise<void> {
         if (!this._stylesheets[src]) {
             this._stylesheets[src] = new Promise((resolve, reject) => {
                 const stylesheet = document.createElement('link');
                 const { prepend = false } = options || {};
 
-                stylesheet.onload = event => resolve(event);
+                stylesheet.onload = () => resolve();
                 stylesheet.onerror = event => {
                     delete this._stylesheets[src];
                     reject(event);
@@ -47,11 +47,12 @@ export default class StylesheetLoader {
         return this._stylesheets[src];
     }
 
-    loadStylesheets(urls: string[], options?: LoadStylesheetOptions): Promise<Event[]> {
-        return Promise.all(urls.map(url => this.loadStylesheet(url, options)));
+    loadStylesheets(urls: string[], options?: LoadStylesheetOptions): Promise<void> {
+        return Promise.all(urls.map(url => this.loadStylesheet(url, options)))
+            .then(() => undefined);
     }
 
-    preloadStylesheet(url: string, options?: PreloadStylesheetOptions): Promise<Event | Response> {
+    preloadStylesheet(url: string, options?: PreloadStylesheetOptions): Promise<void> {
         if (!this._preloadedStylesheets[url]) {
             this._preloadedStylesheets[url] = new Promise((resolve, reject) => {
                 const { prefetch = false } = options || {};
@@ -64,8 +65,8 @@ export default class StylesheetLoader {
                     preloadedStylesheet.rel = prefetch ? 'prefetch' : 'preload';
                     preloadedStylesheet.href = url;
 
-                    preloadedStylesheet.onload = event => {
-                        resolve(event);
+                    preloadedStylesheet.onload = () => {
+                        resolve();
                     };
 
                     preloadedStylesheet.onerror = event => {
@@ -79,7 +80,7 @@ export default class StylesheetLoader {
                         credentials: false,
                         headers: { Accept: 'text/css' },
                     })
-                        .then(resolve)
+                        .then(() => resolve())
                         .catch(reject);
                 }
             });
@@ -88,7 +89,8 @@ export default class StylesheetLoader {
         return this._preloadedStylesheets[url];
     }
 
-    preloadStylesheets(urls: string[], options?: PreloadStylesheetOptions): Promise<Array<Event | Response>> {
-        return Promise.all(urls.map(url => this.preloadStylesheet(url, options)));
+    preloadStylesheets(urls: string[], options?: PreloadStylesheetOptions): Promise<void> {
+        return Promise.all(urls.map(url => this.preloadStylesheet(url, options)))
+            .then(() => undefined);
     }
 }
