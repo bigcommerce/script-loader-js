@@ -76,6 +76,18 @@ describe('ScriptLoader', () => {
             expect(document.body.appendChild)
                 .toHaveBeenCalledTimes(1);
         });
+
+        it('attaches script tag to document with data attributes', async () => {
+            await loader.loadScript(
+                'https://code.jquery.com/jquery-3.2.1.min.js',
+                {'data-attribute1': '1', 'data-attribute2': '2'});
+
+            expect(script.attributes.getNamedItem('data-attribute1')!.value)
+                .toEqual('1');
+
+            expect(script.attributes.getNamedItem('data-attribute2')!.value)
+                .toEqual('2');
+        });
     });
 
     describe('when script fails to load', () => {

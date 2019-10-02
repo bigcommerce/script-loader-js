@@ -10,6 +10,10 @@ export interface PreloadScriptOptions {
     prefetch: boolean;
 }
 
+export interface ScriptAttributes {
+    [key: string]: string;
+}
+
 export default class ScriptLoader {
     private _scripts: { [key: string]: Promise<void> } = {};
     private _preloadedScripts: { [key: string]: Promise<void> } = {};
@@ -22,11 +26,17 @@ export default class ScriptLoader {
         private _requestSender: RequestSender
     ) {}
 
-    loadScript(src: string, options?: LoadScriptOptions): Promise<void> {
+    loadScript(src: string, options?: LoadScriptOptions, scriptAttributes?: ScriptAttributes): Promise<void> {
         if (!this._scripts[src]) {
             this._scripts[src] = new Promise((resolve, reject) => {
                 const script = document.createElement('script') as LegacyHTMLScriptElement;
                 const { async = false } = options || {};
+
+                for (const key in scriptAttributes) {
+                    if (scriptAttributes.hasOwnProperty(key)) {
+                        script.setAttribute(key, scriptAttributes[key]);
+                    }
+                }
 
                 script.onload = () => resolve();
                 script.onreadystatechange = () => resolve();
