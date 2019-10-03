@@ -38,7 +38,11 @@ loader.loadScripts([
 ]);
 ```
 
-This is different to calling `loadScript` multiple times because it can ensure that the scripts are downloaded in parallel but executed in the same sequence as the provided list of URLs.
+To load a script with `async` attribute:
+
+```js
+loader.loadScript('https://cdn.foo.bar/main.js', { async: true });
+```
 
 To preload or prefetch a script:
 
@@ -64,6 +68,8 @@ loader.preloadScripts([
     'https://cdn.foo.bar/another-chunk.js',
 ], { prefetch: true });
 ```
+
+For browsers that don't have the ability to `preload` or `prefetch` resources, scripts will be loaded using regular Ajax requests instead.
 
 ### For stylesheets
 
