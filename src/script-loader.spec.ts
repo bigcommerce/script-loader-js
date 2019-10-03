@@ -16,7 +16,7 @@ describe('ScriptLoader', () => {
             .mockReturnValue(true);
 
         jest.spyOn(requestSender, 'get')
-            .mockReturnValue(Promise.resolve({}));
+            .mockReturnValue(Promise.resolve({} as any));
 
         loader = new ScriptLoader(
             browserSupport,
@@ -38,9 +38,11 @@ describe('ScriptLoader', () => {
                 .mockImplementation(() => script);
 
             jest.spyOn(document.body, 'appendChild')
-                .mockImplementation(element =>
-                    setTimeout(() => element.onreadystatechange(new Event('readystatechange')), 0)
-                );
+                .mockImplementation(element => {
+                    setTimeout(() => (element as any).onreadystatechange(new Event('readystatechange')), 0);
+
+                    return element;
+                });
         });
 
         it('attaches script tag to document', async () => {
@@ -79,9 +81,11 @@ describe('ScriptLoader', () => {
     describe('when script fails to load', () => {
         beforeEach(() => {
             jest.spyOn(document.body, 'appendChild')
-                .mockImplementation(element =>
-                    setTimeout(() => element.onerror(new Event('error')), 0)
-                );
+                .mockImplementation(element => {
+                    setTimeout(() => (element as HTMLElement).onerror!(new Event('error')), 0);
+
+                    return element;
+                });
         });
 
         it('rejects promise if script is not loaded', async () => {
@@ -121,13 +125,10 @@ describe('ScriptLoader', () => {
 
         beforeEach(() => {
             jest.spyOn(loader, 'preloadScripts')
-                .mockReturnValue(Promise.resolve([
-                    new Event('load'),
-                    new Event('load'),
-                ]));
+                .mockReturnValue(Promise.resolve());
 
             jest.spyOn(loader, 'loadScript')
-                .mockReturnValue(Promise.resolve(new Event('readystatechange')));
+                .mockReturnValue(Promise.resolve());
 
             urls = [
                 'https://cdn.foobar.com/foo.min.js',
@@ -137,7 +138,7 @@ describe('ScriptLoader', () => {
 
         it('loads preloaded scripts in sequence', async () => {
             jest.spyOn(loader, 'loadScript')
-                .mockReturnValue(Promise.resolve(new Event('readystatechange')));
+                .mockReturnValue(Promise.resolve());
 
             await loader.loadScripts(urls);
 
@@ -173,9 +174,11 @@ describe('ScriptLoader', () => {
                 .mockImplementation(() => preloadedScript);
 
             jest.spyOn(document.head, 'appendChild')
-                .mockImplementation(element =>
-                    setTimeout(() => element.onload(new Event('load')), 0)
-                );
+                .mockImplementation(element => {
+                    setTimeout(() => (element as HTMLElement).onload!(new Event('load')), 0);
+
+                    return element;
+                });
         });
 
         it('attaches preload link tag to document', async () => {

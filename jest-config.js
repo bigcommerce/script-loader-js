@@ -1,8 +1,6 @@
 module.exports = {
     browser: true,
-    transform: {
-        '\\.(ts|js)$': '<rootDir>/node_modules/ts-jest/preprocessor.js',
-    },
+    preset: 'ts-jest',
     moduleFileExtensions: [
         'ts',
         'tsx',
@@ -11,7 +9,9 @@ module.exports = {
         'json',
     ],
     testRegex: 'src/.*\\.spec.(js|ts)$',
-    setupTestFrameworkScriptFile: '<rootDir>/jest-setup.js',
+    setupFilesAfterEnv: [
+        '<rootDir>/jest-setup.js',
+    ],
     collectCoverageFrom: [
         'src/**/*.{js,ts}',
     ],

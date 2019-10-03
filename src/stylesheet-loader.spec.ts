@@ -18,7 +18,7 @@ describe('StylesheetLoader', () => {
             .mockReturnValue(true);
 
         jest.spyOn(requestSender, 'get')
-            .mockReturnValue(Promise.resolve({}));
+            .mockReturnValue(Promise.resolve({} as any));
 
         jest.spyOn(document, 'createElement')
             .mockImplementation(() => stylesheet);
@@ -36,9 +36,11 @@ describe('StylesheetLoader', () => {
     describe('when stylesheet loads successfully', () => {
         beforeEach(() => {
             jest.spyOn(document.head, 'appendChild')
-                .mockImplementation(element =>
-                    setTimeout(() => element.onload(new Event('load')), 0)
-                );
+                .mockImplementation(element => {
+                    setTimeout(() => (element as HTMLElement).onload!(new Event('load')), 0);
+
+                    return element;
+                });
         });
 
         it('attaches link tag to document', async () => {
@@ -70,9 +72,11 @@ describe('StylesheetLoader', () => {
     describe('when stylesheet fails to load', () => {
         beforeEach(() => {
             jest.spyOn(document.head, 'appendChild')
-                .mockImplementation(element =>
-                    setTimeout(() => element.onerror(new Event('error')), 0)
-                );
+                .mockImplementation(element => {
+                    setTimeout(() => (element as HTMLElement).onerror!(new Event('error')), 0);
+
+                    return element;
+                });
         });
 
         it('rejects promise if stylesheet is not loaded', async () => {
@@ -110,9 +114,11 @@ describe('StylesheetLoader', () => {
                 .mockImplementation(() => preloadedStylesheet);
 
             jest.spyOn(document.head, 'appendChild')
-                .mockImplementation(element =>
-                    setTimeout(() => element.onload(new Event('load')), 0)
-                );
+                .mockImplementation(element => {
+                    setTimeout(() => (element as HTMLElement).onload!(new Event('load')), 0);
+
+                    return element;
+                });
         });
 
         it('attaches preload link tag to document', async () => {
