@@ -1,10 +1,27 @@
+import { createRequestSender, RequestSender } from '@bigcommerce/request-sender';
+
+import BrowserSupport from './browser-support';
 import ScriptLoader from './script-loader';
 
 describe('ScriptLoader', () => {
+    let browserSupport: BrowserSupport;
     let loader: ScriptLoader;
+    let requestSender: RequestSender;
 
     beforeEach(() => {
-        loader = new ScriptLoader();
+        browserSupport = new BrowserSupport();
+        requestSender = createRequestSender();
+
+        jest.spyOn(browserSupport, 'canSupportRel')
+            .mockReturnValue(true);
+
+        jest.spyOn(requestSender, 'get')
+            .mockReturnValue(Promise.resolve({}));
+
+        loader = new ScriptLoader(
+            browserSupport,
+            requestSender
+        );
     });
 
     afterEach(() => {
@@ -36,11 +53,18 @@ describe('ScriptLoader', () => {
                 .toEqual('https://code.jquery.com/jquery-3.2.1.min.js');
         });
 
+        it('loads script synchronously by default', async () => {
+            await loader.loadScript('https://code.jquery.com/jquery-3.2.1.min.js');
+
+            expect(script.async)
+                .toEqual(false);
+        });
+
         it('resolves promise if script is loaded', async () => {
             const output = await loader.loadScript('https://code.jquery.com/jquery-3.2.1.min.js');
 
             expect(output)
-                .toBeInstanceOf(Event);
+                .toBeUndefined();
         });
 
         it('does not load same script twice', async () => {
@@ -109,13 +133,6 @@ describe('ScriptLoader', () => {
                 'https://cdn.foobar.com/foo.min.js',
                 'https://cdn.foobar.com/bar.min.js',
             ];
-        });
-
-        it('preloads scripts in parallel', async () => {
-            await loader.loadScripts(urls);
-
-            expect(loader.preloadScripts)
-                .toHaveBeenCalledWith(urls);
         });
 
         it('loads preloaded scripts in sequence', async () => {
@@ -195,11 +212,24 @@ describe('ScriptLoader', () => {
                 .toEqual('https://cdn.foobar.com/foo.min.js');
         });
 
+        it('falls back to using XHR if browser does not support preload', async () => {
+            jest.spyOn(browserSupport, 'canSupportRel')
+                .mockImplementation(rel => rel === 'preload' ? false : true);
+
+            await loader.preloadScript('https://cdn.foobar.com/foo.min.js');
+
+            expect(requestSender.get)
+                .toHaveBeenCalledWith('https://cdn.foobar.com/foo.min.js', {
+                    credentials: false,
+                    headers: { Accept: 'application/javascript' },
+                });
+        });
+
         it('resolves promise if script is preloaded', async () => {
             const output = await loader.preloadScript('https://cdn.foobar.com/foo.min.js');
 
             expect(output)
-                .toBeInstanceOf(Event);
+                .toBeUndefined();
         });
     });
 });
