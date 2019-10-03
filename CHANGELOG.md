@@ -1,6 +1,30 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [2.0.0](https://github.com/bigcommerce/script-loader-js/compare/v1.0.0...v2.0.0) (2019-10-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** Previously, when a script is loaded, we return the
+associated event object inside a promise object to the caller. With this
+change, we return an empty promise object instead. This change is
+necessary because we can't guarantee that scripts can be loaded in the
+same way across different browsers. For example, some browsers don't
+support `rel="preload"`, so as a fallback, we have to preload scripts
+using regular XHR calls. In that case, we don't have an event object to
+return to the caller. We could potentially mock the event object to keep
+the return values consistent. But considering it is not a very useful
+thing to return, we've decided to make a breaking change and return
+nothing instead.
+
+### Bug Fixes
+
+* **core:** CHECKOUT-4455 Provide fallback for browsers that don't support `preload` attribute ([0fc52e7](https://github.com/bigcommerce/script-loader-js/commit/0fc52e7))
+
+
+* **core:** CHECKOUT-4455 Stop resolving promise with load event ([670fd2c](https://github.com/bigcommerce/script-loader-js/commit/670fd2c))
 
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/bigcommerce/script-loader-js/compare/v0.2.0...v1.0.0) (2019-09-23)
