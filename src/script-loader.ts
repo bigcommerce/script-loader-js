@@ -4,6 +4,7 @@ import BrowserSupport from './browser-support';
 
 export interface LoadScriptOptions {
     async: boolean;
+    attributes: ScriptAttributes;
 }
 
 export interface PreloadScriptOptions {
@@ -26,11 +27,12 @@ export default class ScriptLoader {
         private _requestSender: RequestSender
     ) {}
 
-    loadScript(src: string, options?: LoadScriptOptions, scriptAttributes?: ScriptAttributes): Promise<void> {
+    loadScript(src: string, options?: LoadScriptOptions): Promise<void> {
         if (!this._scripts[src]) {
             this._scripts[src] = new Promise((resolve, reject) => {
                 const script = document.createElement('script') as LegacyHTMLScriptElement;
                 const { async = false } = options || {};
+                const scriptAttributes = options && options.attributes;
 
                 for (const key in scriptAttributes) {
                     if (scriptAttributes.hasOwnProperty(key)) {

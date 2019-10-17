@@ -80,8 +80,7 @@ describe('ScriptLoader', () => {
         it('attaches script tag to document with data attributes', async () => {
             await loader.loadScript(
                 'https://code.jquery.com/jquery-3.2.1.min.js',
-                undefined,
-                {'data-attribute1': '1', 'data-attribute2': '2'});
+                {async: true, attributes: {'data-attribute1': '1', 'data-attribute2': '2'}});
 
             expect(script.attributes.getNamedItem('data-attribute1')!.value)
                 .toEqual('1');
