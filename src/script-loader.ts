@@ -31,14 +31,12 @@ export default class ScriptLoader {
         if (!this._scripts[src]) {
             this._scripts[src] = new Promise((resolve, reject) => {
                 const script = document.createElement('script') as LegacyHTMLScriptElement;
-                const { async = false } = options || {};
-                const scriptAttributes = options && options.attributes;
+                const { async = false, attributes = {} } = options || {};
 
-                for (const key in scriptAttributes) {
-                    if (scriptAttributes.hasOwnProperty(key)) {
-                        script.setAttribute(key, scriptAttributes[key]);
-                    }
-                }
+                Object.keys(attributes)
+                    .forEach(key => {
+                        script.setAttribute(key, attributes[key]);
+                    });
 
                 script.onload = () => resolve();
                 script.onreadystatechange = () => resolve();
