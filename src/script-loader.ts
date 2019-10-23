@@ -4,10 +4,15 @@ import BrowserSupport from './browser-support';
 
 export interface LoadScriptOptions {
     async: boolean;
+    attributes: ScriptAttributes;
 }
 
 export interface PreloadScriptOptions {
     prefetch: boolean;
+}
+
+export interface ScriptAttributes {
+    [key: string]: string;
 }
 
 export default class ScriptLoader {
@@ -26,7 +31,12 @@ export default class ScriptLoader {
         if (!this._scripts[src]) {
             this._scripts[src] = new Promise((resolve, reject) => {
                 const script = document.createElement('script') as LegacyHTMLScriptElement;
-                const { async = false } = options || {};
+                const { async = false, attributes = {} } = options || {};
+
+                Object.keys(attributes)
+                    .forEach(key => {
+                        script.setAttribute(key, attributes[key]);
+                    });
 
                 script.onload = () => resolve();
                 script.onreadystatechange = () => resolve();
