@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/bigcommerce/script-loader-js/compare/v2.0.0...v2.1.0) (2019-10-24)
+
+
+### Features
+
+* **common:** PAYPAL-7 Pass in merchant ID on PayPal button script for PayPal Express Checkout ([bdfbcd5](https://github.com/bigcommerce/script-loader-js/commit/bdfbcd5))
+* **common:** PAYPAL-7 Pass in merchant ID on PayPal button script for PayPal Express Checkout ([fc9e7c9](https://github.com/bigcommerce/script-loader-js/commit/fc9e7c9))
+* **common:** PAYPAL-7 Pass in merchant ID on PayPal button script for PayPal Express Checkout ([b6613e3](https://github.com/bigcommerce/script-loader-js/commit/b6613e3))
+* **common:** PAYPAL-7 Pass in merchant ID on PayPal button script for PayPal Express Checkout ([fe07c6e](https://github.com/bigcommerce/script-loader-js/commit/fe07c6e))
+
 ## [2.0.0](https://github.com/bigcommerce/script-loader-js/compare/v1.0.0...v2.0.0) (2019-10-03)
 
 
