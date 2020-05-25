@@ -67,6 +67,18 @@ describe('StylesheetLoader', () => {
             expect(document.head.appendChild)
                 .toHaveBeenCalledTimes(1);
         });
+
+        it('attaches stylesheet tag to document with data attributes', async () => {
+            await loader.loadStylesheet(
+                'https://foo.bar/hello-world.css',
+                {prepend: true, attributes: {'data-attribute1': '1', 'data-attribute2': '2'}});
+
+            expect(stylesheet.attributes.getNamedItem('data-attribute1')!.value)
+                .toEqual('1');
+
+            expect(stylesheet.attributes.getNamedItem('data-attribute2')!.value)
+                .toEqual('2');
+        });
     });
 
     describe('when stylesheet fails to load', () => {

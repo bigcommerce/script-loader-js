@@ -4,10 +4,15 @@ import BrowserSupport from './browser-support';
 
 export interface LoadStylesheetOptions {
     prepend: boolean;
+    attributes?: StylesheetAttributes;
 }
 
 export interface PreloadStylesheetOptions {
     prefetch: boolean;
+}
+
+export interface StylesheetAttributes {
+    [key: string]: string;
 }
 
 export default class StylesheetLoader {
@@ -26,7 +31,12 @@ export default class StylesheetLoader {
         if (!this._stylesheets[src]) {
             this._stylesheets[src] = new Promise((resolve, reject) => {
                 const stylesheet = document.createElement('link');
-                const { prepend = false } = options || {};
+                const { prepend = false, attributes = {} } = options || {};
+
+                Object.keys(attributes)
+                    .forEach(key => {
+                        stylesheet.setAttribute(key, attributes[key]);
+                    });
 
                 stylesheet.onload = () => resolve();
                 stylesheet.onerror = event => {
