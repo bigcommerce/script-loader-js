@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.2](https://github.com/bigcommerce/script-loader-js/compare/v2.2.1...v2.2.2) (2020-06-23)
+
+
+### Bug Fixes
+
+* **common:** CHECKOUT-4954 Upgrade request-sender version ([201651b](https://github.com/bigcommerce/script-loader-js/commit/201651b))
+
 ### [2.2.1](https://github.com/bigcommerce/script-loader-js/compare/v2.2.0...v2.2.1) (2020-05-25)
 
 ## [2.2.0](https://github.com/bigcommerce/script-loader-js/compare/v2.1.0...v2.2.0) (2020-05-25)
