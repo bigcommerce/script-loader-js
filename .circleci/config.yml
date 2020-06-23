@@ -1,0 +1,44 @@
+aliases:
+  - &node_executor
+      executor:
+        name: node/node
+        node-version: "10"
+
+version: 2.1
+
+orbs:
+  ci: bigcommerce/internal@volatile
+  node: bigcommerce/internal-node@volatile
+
+jobs:
+  test:
+    <<: *node_executor
+    steps:
+      - ci/pre-setup
+      - node/npm-install
+      - run:
+          name: "Run unit tests"
+          command: npm run test:series -- --coverage
+      - store_artifacts:
+          path: coverage
+          destination: coverage
+
+  build:
+    <<: *node_executor
+    steps:
+      - ci/pre-setup
+      - node/npm-install
+      - run:
+          name: "Run linter"
+          command: npm run lint
+      - run:
+          name: "Build files"
+          command: npm run build
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - ci/validate-commits
+      - test
+      - build
