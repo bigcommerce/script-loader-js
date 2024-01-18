@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@bigcommerce/request-sender": "^1.1.0",
-    "tslib": "^1.10.0"
+    "tslib": "^2.6.2"
   },
   "devDependencies": {
     "@bigcommerce/tslint-config": "^2.0.1",
