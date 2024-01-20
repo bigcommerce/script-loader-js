@@ -39,7 +39,7 @@
     "@bigcommerce/tslint-config": "^2.0.1",
     "@bigcommerce/validate-commits": "^2.2.0",
     "@types/jest": "^24.0.17",
-    "check-node-version": "^3.2.0",
+    "check-node-version": "^4.2.1",
     "jest": "^24.8.0",
     "standard-version": "^9.5.0",
     "ts-jest": "^24.0.2",
