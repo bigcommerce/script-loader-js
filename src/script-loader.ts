@@ -27,8 +27,8 @@ export default class ScriptLoader {
         private _requestSender: RequestSender
     ) {}
 
-    loadScript(src: string, options?: LoadScriptOptions): Promise<void> {
-        if (!this._scripts[src]) {
+    loadScript(src: string, options?: LoadScriptOptions, reloadScript?: boolean): Promise<void> {
+        if (!this._scripts[src] || !!this._scripts[src] && reloadScript) {
             this._scripts[src] = new Promise((resolve, reject) => {
                 const script = document.createElement('script') as LegacyHTMLScriptElement;
                 const { async = false, attributes = {} } = options || {};
