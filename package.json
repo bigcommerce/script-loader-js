@@ -36,7 +36,7 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@bigcommerce/tslint-config": "^2.0.1",
+    "@bigcommerce/tslint-config": "^4.1.0",
     "@bigcommerce/validate-commits": "^2.2.0",
     "@types/jest": "^24.0.17",
     "check-node-version": "^4.2.1",
