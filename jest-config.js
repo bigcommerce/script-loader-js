@@ -1,6 +1,6 @@
 module.exports = {
-    browser: true,
     preset: 'ts-jest',
+    testEnvironment: 'jsdom',
     moduleFileExtensions: [
         'ts',
         'tsx',
