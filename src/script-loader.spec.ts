@@ -82,11 +82,13 @@ describe('ScriptLoader', () => {
                 'https://code.jquery.com/jquery-3.2.1.min.js',
                 {async: true, attributes: {'data-attribute1': '1', 'data-attribute2': '2'}});
 
-            expect(script.attributes.getNamedItem('data-attribute1')!.value)
-                .toEqual('1');
+            const attr1 = script.attributes.getNamedItem('data-attribute1');
+            expect(attr1).not.toBeNull();
+            expect(attr1?.value).toEqual('1');
 
-            expect(script.attributes.getNamedItem('data-attribute2')!.value)
-                .toEqual('2');
+            const attr2 = script.attributes.getNamedItem('data-attribute2');
+            expect(attr2).not.toBeNull();
+            expect(attr2?.value).toEqual('2');
         });
     });
 
@@ -94,7 +96,14 @@ describe('ScriptLoader', () => {
         beforeEach(() => {
             jest.spyOn(document.body, 'appendChild')
                 .mockImplementation(element => {
-                    setTimeout(() => (element as HTMLElement).onerror!(new Event('error')), 0);
+                    setTimeout(() => {
+                        const onerror = (element as HTMLElement & {
+                            onerror?(this: HTMLElement, ev: Event): any;
+                        }).onerror;
+                        if (typeof onerror === 'function') {
+                            onerror.call(element as HTMLElement, new Event('error'));
+                        }
+                    }, 0);
 
                     return element;
                 });
@@ -187,7 +196,14 @@ describe('ScriptLoader', () => {
 
             jest.spyOn(document.head, 'appendChild')
                 .mockImplementation(element => {
-                    setTimeout(() => (element as HTMLElement).onload!(new Event('load')), 0);
+                    setTimeout(() => {
+                        const onload = (element as HTMLElement & {
+                            onload?(this: HTMLElement, ev: Event): any;
+                        }).onload;
+                        if (typeof onload === 'function') {
+                            onload.call(element as HTMLElement, new Event('load'));
+                        }
+                    }, 0);
 
                     return element;
                 });

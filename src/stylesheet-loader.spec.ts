@@ -37,7 +37,14 @@ describe('StylesheetLoader', () => {
         beforeEach(() => {
             jest.spyOn(document.head, 'appendChild')
                 .mockImplementation(element => {
-                    setTimeout(() => (element as HTMLElement).onload!(new Event('load')), 0);
+                    setTimeout(() => {
+                        const onload = (element as HTMLElement & {
+                            onload?(this: HTMLElement, ev: Event): any;
+                        }).onload;
+                        if (typeof onload === 'function') {
+                            onload.call(element as HTMLElement, new Event('load'));
+                        }
+                    }, 0);
 
                     return element;
                 });
@@ -73,11 +80,13 @@ describe('StylesheetLoader', () => {
                 'https://foo.bar/hello-world.css',
                 {prepend: true, attributes: {'data-attribute1': '1', 'data-attribute2': '2'}});
 
-            expect(stylesheet.attributes.getNamedItem('data-attribute1')!.value)
-                .toEqual('1');
+            const attr1 = stylesheet.attributes.getNamedItem('data-attribute1');
+            expect(attr1).not.toBeNull();
+            expect(attr1?.value).toEqual('1');
 
-            expect(stylesheet.attributes.getNamedItem('data-attribute2')!.value)
-                .toEqual('2');
+            const attr2 = stylesheet.attributes.getNamedItem('data-attribute2');
+            expect(attr2).not.toBeNull();
+            expect(attr2?.value).toEqual('2');
         });
     });
 
@@ -85,7 +94,12 @@ describe('StylesheetLoader', () => {
         beforeEach(() => {
             jest.spyOn(document.head, 'appendChild')
                 .mockImplementation(element => {
-                    setTimeout(() => (element as HTMLElement).onerror!(new Event('error')), 0);
+                    setTimeout(() => {
+                        const onerror = (element as HTMLElement).onerror;
+                        if (typeof onerror === 'function') {
+                            onerror(new Event('error'));
+                        }
+                    }, 0);
 
                     return element;
                 });
@@ -127,7 +141,9 @@ describe('StylesheetLoader', () => {
 
             jest.spyOn(document.head, 'appendChild')
                 .mockImplementation(element => {
-                    setTimeout(() => (element as HTMLElement).onload!(new Event('load')), 0);
+                    setTimeout(() => {
+                        element.dispatchEvent(new Event('load'));
+                    }, 0);
 
                     return element;
                 });
