@@ -9,7 +9,7 @@ export interface LoadStylesheetOptions {
 
 export interface PreloadStylesheetOptions {
     prefetch: boolean;
-    crossOrigin?: string;
+    crossOrigin?: 'anonymous' | 'use-credentials';
 }
 
 export interface StylesheetAttributes {

@@ -9,7 +9,7 @@ export interface LoadScriptOptions {
 
 export interface PreloadScriptOptions {
     prefetch: boolean;
-    crossOrigin?: string;
+    crossOrigin?: 'anonymous' | 'use-credentials';
 }
 
 export interface ScriptAttributes {
