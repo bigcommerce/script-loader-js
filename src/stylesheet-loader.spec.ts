@@ -196,6 +196,23 @@ describe('StylesheetLoader', () => {
                 });
         });
 
+        it('sets crossorigin attribute if option is provided', async () => {
+            await loader.preloadStylesheet('https://foo.bar/hello-world.css', {
+                prefetch: true,
+                crossOrigin: 'anonymous',
+            });
+
+            expect(preloadedStylesheet.crossOrigin)
+                .toEqual('anonymous');
+        });
+
+        it('does not set crossorigin attribute if option is not provided', async () => {
+            await loader.preloadStylesheet('https://foo.bar/hello-world.css');
+
+            expect(preloadedStylesheet.crossOrigin)
+                .toBeFalsy();
+        });
+
         it('resolves promise if stylesheet is preloaded', async () => {
             const output = await loader.preloadStylesheet('https://foo.bar/hello-world.css');
 

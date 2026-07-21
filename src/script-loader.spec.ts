@@ -256,6 +256,23 @@ describe('ScriptLoader', () => {
                 });
         });
 
+        it('sets crossorigin attribute if option is provided', async () => {
+            await loader.preloadScript('https://cdn.foobar.com/foo.min.js', {
+                prefetch: true,
+                crossOrigin: 'anonymous',
+            });
+
+            expect(preloadedScript.crossOrigin)
+                .toEqual('anonymous');
+        });
+
+        it('does not set crossorigin attribute if option is not provided', async () => {
+            await loader.preloadScript('https://cdn.foobar.com/foo.min.js');
+
+            expect(preloadedScript.crossOrigin)
+                .toBeFalsy();
+        });
+
         it('resolves promise if script is preloaded', async () => {
             const output = await loader.preloadScript('https://cdn.foobar.com/foo.min.js');
 
