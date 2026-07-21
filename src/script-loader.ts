@@ -9,6 +9,7 @@ export interface LoadScriptOptions {
 
 export interface PreloadScriptOptions {
     prefetch: boolean;
+    crossOrigin?: string;
 }
 
 export interface ScriptAttributes {
@@ -62,7 +63,7 @@ export default class ScriptLoader {
     preloadScript(url: string, options?: PreloadScriptOptions): Promise<void> {
         if (!this._preloadedScripts[url]) {
             this._preloadedScripts[url] = new Promise((resolve, reject) => {
-                const { prefetch = false } = options || {};
+                const { prefetch = false, crossOrigin } = options || {};
                 const rel = prefetch ? 'prefetch' : 'preload';
 
                 if (this._browserSupport.canSupportRel(rel)) {
@@ -72,12 +73,20 @@ export default class ScriptLoader {
                     preloadedScript.rel = rel;
                     preloadedScript.href = url;
 
+                    if (crossOrigin) {
+                        preloadedScript.crossOrigin = crossOrigin;
+                    }
+
                     preloadedScript.onload = () => {
                         resolve();
                     };
 
                     preloadedScript.onerror = () => {
                         delete this._preloadedScripts[url];
+
+                        // tslint:disable-next-line:no-console
+                        console.log(`Unable to preload script: ${url}`);
+
                         reject();
                     };
 

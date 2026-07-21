@@ -9,6 +9,7 @@ export interface LoadStylesheetOptions {
 
 export interface PreloadStylesheetOptions {
     prefetch: boolean;
+    crossOrigin?: string;
 }
 
 export interface StylesheetAttributes {
@@ -65,7 +66,7 @@ export default class StylesheetLoader {
     preloadStylesheet(url: string, options?: PreloadStylesheetOptions): Promise<void> {
         if (!this._preloadedStylesheets[url]) {
             this._preloadedStylesheets[url] = new Promise((resolve, reject) => {
-                const { prefetch = false } = options || {};
+                const { prefetch = false, crossOrigin } = options || {};
                 const rel = prefetch ? 'prefetch' : 'preload';
 
                 if (this._browserSupport.canSupportRel(rel)) {
@@ -75,12 +76,20 @@ export default class StylesheetLoader {
                     preloadedStylesheet.rel = prefetch ? 'prefetch' : 'preload';
                     preloadedStylesheet.href = url;
 
+                    if (crossOrigin) {
+                        preloadedStylesheet.crossOrigin = crossOrigin;
+                    }
+
                     preloadedStylesheet.onload = () => {
                         resolve();
                     };
 
                     preloadedStylesheet.onerror = event => {
                         delete this._preloadedStylesheets[url];
+
+                        // tslint:disable-next-line:no-console
+                        console.log(`Unable to preload stylesheet: ${url}`);
+
                         reject(event);
                     };
 
