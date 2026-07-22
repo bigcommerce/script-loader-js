@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/bigcommerce/script-loader-js/compare/v2.2.5...v2.3.0) (2026-07-22)
+
+
+### Features
+
+* **core:** CHECKOUT-10115 Add support for passing crossorigin ([#72](https://github.com/bigcommerce/script-loader-js/issues/72)) ([463dc21](https://github.com/bigcommerce/script-loader-js/commit/463dc216aeec21c41c16f2c9290e798475278253))
+
 ### [2.2.5](https://github.com/bigcommerce/script-loader-js/compare/v2.2.3...v2.2.5) (2025-05-01)
 
 ### [2.2.3](https://github.com/bigcommerce/script-loader-js/compare/v2.2.2...v2.2.3) (2024-01-18)
