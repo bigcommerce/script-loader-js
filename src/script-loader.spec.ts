@@ -62,6 +62,14 @@ describe('ScriptLoader', () => {
                 .toEqual(false);
         });
 
+        it('reload existing script', async () => {
+            await loader.loadScript('https://code.jquery.com/jquery-3.2.1.min.js');
+            await loader.loadScript('https://code.jquery.com/jquery-3.2.1.min.js', undefined, true);
+
+            expect(document.body.appendChild)
+                .toHaveBeenCalledTimes(2);
+        });
+
         it('resolves promise if script is loaded', async () => {
             const output = await loader.loadScript('https://code.jquery.com/jquery-3.2.1.min.js');
 
